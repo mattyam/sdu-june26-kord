@@ -16,12 +16,22 @@ html, body {
   font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   color: #e6eef8;
 }
-.wrap {
-  max-width: 1000px;
-  margin: 2px 0;
-  padding: 0;
+  html,
+body,
+.wrap,
+.carousel,
+.track,
+.slide,
+.slide-inner {
+  background: transparent !important;
 }
-
+.wrap {
+  max-width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
 /* Carousel */
 .carousel {
   position: relative;
@@ -105,6 +115,17 @@ html, body {
 @media (max-width:800px){
   .slide-inner{ height:62vw; }
   .btn{ width:40px; height:40px; }
+}
+  html,
+body {
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 </style>
 </head>
