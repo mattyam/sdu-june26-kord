@@ -1,134 +1,132 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 :root {
   --accent: #5b8cff;
-  --btn-size: 48px;
-  --forum-bg: #2b171d;
+  --button-size: 46px;
+  --radius: 18px;
+  --carousel-height: clamp(260px, 56vw, 560px);
 }
 
 html,
 body {
-  width: 100%;
-  height: auto;
   margin: 0;
   padding: 0;
+  width: 100%;
+  background: transparent !important;
   overflow: hidden;
-  background: var(--forum-bg) !important;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  color: #e6eef8;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-.wrap,
-.carousel,
-.track,
-.slide,
-.slide-inner,
-.dots {
-  background: var(--forum-bg) !important;
-}
-
-.wrap {
+.carousel-embed {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   margin: 0;
   padding: 0;
+  background: transparent !important;
+  isolation: isolate;
+  line-height: 0;
 }
 
 .carousel {
   position: relative;
+  width: 100%;
+  height: var(--carousel-height);
   overflow: hidden;
-  border-radius: 18px;
-  box-shadow: none !important;
+  border-radius: var(--radius);
+  background: transparent !important;
   user-select: none;
+  touch-action: pan-y;
 }
 
 .track {
+  height: 100%;
   display: flex;
-  transition: transform .35s cubic-bezier(.2,.9,.2,1);
+  background: transparent !important;
+  transition: transform 360ms cubic-bezier(.22,.9,.25,1);
   will-change: transform;
 }
 
 .slide {
-  min-width: 100%;
-  padding: 0;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
 }
 
-.slide-inner {
-  border-radius: 14px;
-  overflow: hidden;
-  height: 520px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.slide-inner img {
+.slide img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border: 0;
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
-.btn {
+.carousel-btn {
   position: absolute;
   top: 50%;
+  z-index: 5;
+  width: var(--button-size);
+  height: var(--button-size);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  padding: 0;
   transform: translateY(-50%);
-  width: var(--btn-size);
-  height: var(--btn-size);
-  border-radius: 50%;
-  background: rgba(5,10,30,0.6);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(5,10,30,.58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-  z-index: 10;
+  display: grid;
+  place-items: center;
+  line-height: 1;
 }
 
-.btn svg {
-  width: 20px;
-  height: 20px;
+.carousel-btn:hover {
+  background: rgba(5,10,30,.76);
+}
+
+.carousel-btn svg {
+  width: 22px;
+  height: 22px;
   fill: #fff;
 }
 
-.btn.left {
-  left: 18px;
+.carousel-btn.prev {
+  left: 16px;
 }
 
-.btn.right {
-  right: 18px;
+.carousel-btn.next {
+  right: 16px;
 }
 
 .dots {
+  width: 100%;
   display: flex;
-  gap: 8px;
   justify-content: center;
+  gap: 8px;
   padding: 12px 0 0;
+  margin: 0;
+  background: transparent !important;
+  line-height: 1;
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(210,210,210,0.8);
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: rgba(255,255,255,.55);
   cursor: pointer;
 }
 
@@ -136,204 +134,208 @@ body::-webkit-scrollbar {
   background: var(--accent);
 }
 
-@media (max-width: 800px) {
-  .slide-inner {
-    height: 62vw;
+@media (max-width: 700px) {
+  :root {
+    --button-size: 40px;
+    --carousel-height: clamp(220px, 62vw, 420px);
   }
 
-  .btn {
-    width: 40px;
-    height: 40px;
+  .carousel {
+    border-radius: 14px;
+  }
+
+  .carousel-btn.prev {
+    left: 10px;
+  }
+
+  .carousel-btn.next {
+    right: 10px;
   }
 }
 </style>
 </head>
 
 <body>
-<div class="wrap">
-  <div id="carousel" class="carousel" aria-roledescription="carousel">
-    <div id="track" class="track"></div>
+<div class="carousel-embed">
+  <div class="carousel" id="carousel" tabindex="0" aria-label="Image carousel">
+    <div class="track" id="track"></div>
 
-    <button class="btn left" id="prevBtn" aria-label="Previous">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    <button class="carousel-btn prev" id="prevBtn" type="button" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
       </svg>
     </button>
 
-    <button class="btn right" id="nextBtn" aria-label="Next">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+    <button class="carousel-btn next" id="nextBtn" type="button" aria-label="Next image">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
       </svg>
     </button>
   </div>
 
-  <div id="dots" class="dots" aria-hidden="true"></div>
+  <div class="dots" id="dots" aria-label="Carousel navigation"></div>
 </div>
 
 <script>
-const images = [
-  'https://cdn.shopify.com/s/files/1/0055/5525/7434/files/HoFKORD.png?v=1780661490',
-  'https://cdn.shopify.com/s/files/1/0055/5525/7434/files/Microsoft_Flight_Simulator_2024_Screenshot_2026.06.01_-_22.06.39.86.png?v=1780661484',
-  'https://cdn.shopify.com/s/files/1/0055/5525/7434/files/Microsoft_Flight_Simulator_2024_Screenshot_2026.06.01_-_21.56.14.92.png?v=1780661484',
-  'https://cdn.shopify.com/s/files/1/0055/5525/7434/files/Microsoft_Flight_Simulator_2024_Screenshot_2026.06.01_-_22.26.32.54.png?v=1780661484'
-];
+(() => {
+  const images = [
+    "https://cdn.shopify.com/s/files/1/0055/5525/7434/files/HoFKORD.png?v=1780661490",
+    "https://cdn.shopify.com/s/files/1/0055/5525/7434/files/Microsoft_Flight_Simulator_2024_Screenshot_2026.06.01_-_22.06.39.86.png?v=1780661484",
+    "https://cdn.shopify.com/s/files/1/0055/5525/7434/files/Microsoft_Flight_Simulator_2024_Screenshot_2026.06.01_-_21.56.14.92.png?v=1780661484",
+    "https://cdn.shopify.com/s/files/1/0055/5525/7434/files/Microsoft_Flight_Simulator_2024_Screenshot_2026.06.01_-_22.26.32.54.png?v=1780661484"
+  ];
 
-const track = document.getElementById('track');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const dotsWrap = document.getElementById('dots');
+  const carousel = document.getElementById("carousel");
+  const track = document.getElementById("track");
+  const dots = document.getElementById("dots");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
 
-let slides = [];
-let index = 1;
-let isDragging = false;
-let startX = 0;
-let currentTranslate = 0;
-let prevTranslate = 0;
-let isMoving = false;
+  let index = 1;
+  let locked = false;
+  let dragging = false;
+  let startX = 0;
+  let deltaX = 0;
 
-function makeSlide(src, idx) {
-  const s = document.createElement('div');
-  s.className = 'slide';
+  function createSlide(src, alt) {
+    const slide = document.createElement("div");
+    slide.className = "slide";
 
-  const inner = document.createElement('div');
-  inner.className = 'slide-inner';
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = alt;
+    img.loading = "lazy";
+    img.decoding = "async";
 
-  const img = document.createElement('img');
-  img.src = src;
-  img.alt = `Slide ${idx + 1}`;
+    slide.appendChild(img);
+    return slide;
+  }
 
-  inner.appendChild(img);
-  s.appendChild(inner);
+  function build() {
+    track.innerHTML = "";
+    dots.innerHTML = "";
 
-  return s;
-}
+    track.appendChild(createSlide(images[images.length - 1], "Carousel image " + images.length));
 
-function buildCarousel() {
-  track.innerHTML = '';
+    images.forEach((src, i) => {
+      track.appendChild(createSlide(src, "Carousel image " + (i + 1)));
 
-  const first = makeSlide(images[0], 0);
-  const last = makeSlide(images[images.length - 1], images.length - 1);
+      const dot = document.createElement("button");
+      dot.className = "dot";
+      dot.type = "button";
+      dot.ariaLabel = "Go to image " + (i + 1);
+      dot.addEventListener("click", () => goTo(i + 1));
+      dots.appendChild(dot);
+    });
 
-  track.appendChild(last.cloneNode(true));
+    track.appendChild(createSlide(images[0], "Carousel image 1"));
 
-  images.forEach((src, i) => {
-    track.appendChild(makeSlide(src, i));
+    setPosition(false);
+    updateDots();
+  }
+
+  function setPosition(animate = true) {
+    track.style.transition = animate ? "transform 360ms cubic-bezier(.22,.9,.25,1)" : "none";
+    track.style.transform = `translateX(${-index * 100}%)`;
+  }
+
+  function updateDots() {
+    [...dots.children].forEach(dot => dot.classList.remove("active"));
+    const realIndex = (index - 1 + images.length) % images.length;
+    dots.children[realIndex]?.classList.add("active");
+  }
+
+  function goTo(newIndex) {
+    if (locked) return;
+    locked = true;
+    index = newIndex;
+    setPosition(true);
+    updateDots();
+  }
+
+  function next() {
+    if (locked) return;
+    locked = true;
+    index++;
+    setPosition(true);
+    updateDots();
+  }
+
+  function prev() {
+    if (locked) return;
+    locked = true;
+    index--;
+    setPosition(true);
+    updateDots();
+  }
+
+  track.addEventListener("transitionend", () => {
+    if (index === 0) {
+      index = images.length;
+      setPosition(false);
+    }
+
+    if (index === images.length + 1) {
+      index = 1;
+      setPosition(false);
+    }
+
+    updateDots();
+    locked = false;
   });
 
-  track.appendChild(first.cloneNode(true));
-
-  slides = Array.from(track.children);
-
-  dotsWrap.innerHTML = '';
-
-  images.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'dot';
-    d.dataset.i = i;
-    d.addEventListener('click', () => goTo(i));
-    dotsWrap.appendChild(d);
+  carousel.addEventListener("pointerdown", e => {
+    dragging = true;
+    locked = true;
+    startX = e.clientX;
+    deltaX = 0;
+    track.style.transition = "none";
+    carousel.setPointerCapture(e.pointerId);
   });
 
-  index = 1;
-  applyTranslate(false);
-  updateDots();
-  isMoving = false;
-}
+  carousel.addEventListener("pointermove", e => {
+    if (!dragging) return;
 
-function applyTranslate(animate = true) {
-  isMoving = true;
-  track.style.transition = animate ? 'transform .35s cubic-bezier(.2,.9,.2,1)' : 'none';
-  track.style.transform = `translateX(${-index * 100}%)`;
-}
+    deltaX = e.clientX - startX;
+    const width = carousel.clientWidth;
+    const offset = (-index * width) + deltaX;
 
-function updateDots() {
-  const dots = Array.from(dotsWrap.children);
-  dots.forEach(d => d.classList.remove('active'));
+    track.style.transform = `translateX(${offset}px)`;
+  });
 
-  const imgIndex = (index - 1 + images.length) % images.length;
+  function endDrag(e) {
+    if (!dragging) return;
 
-  if (dots[imgIndex]) {
-    dots[imgIndex].classList.add('active');
-  }
-}
+    dragging = false;
 
-function goTo(i) {
-  if (isMoving) return;
-  index = i + 1;
-  applyTranslate();
-  updateDots();
-}
+    const threshold = carousel.clientWidth * 0.16;
 
-nextBtn.addEventListener('click', () => {
-  if (isMoving) return;
-  index++;
-  applyTranslate();
-});
+    if (deltaX < -threshold) index++;
+    if (deltaX > threshold) index--;
 
-prevBtn.addEventListener('click', () => {
-  if (isMoving) return;
-  index--;
-  applyTranslate();
-});
+    setPosition(true);
 
-track.addEventListener('transitionend', () => {
-  if (index === 0) index = images.length;
-  if (index === images.length + 1) index = 1;
-
-  applyTranslate(false);
-  updateDots();
-  isMoving = false;
-});
-
-const dragStart = (e) => {
-  isDragging = true;
-  startX = e.clientX || e.touches[0].clientX;
-  prevTranslate = -index * track.clientWidth;
-  track.style.transition = 'none';
-
-  if (e.pointerId) {
-    track.setPointerCapture(e.pointerId);
-  }
-};
-
-const dragMove = (e) => {
-  if (!isDragging) return;
-
-  const currentX = e.clientX || e.touches[0].clientX;
-  currentTranslate = prevTranslate + (currentX - startX);
-  track.style.transform = `translateX(${currentTranslate}px)`;
-};
-
-const dragEnd = (e) => {
-  if (!isDragging) return;
-
-  isDragging = false;
-
-  const slideWidth = track.clientWidth;
-  const movedBy = currentTranslate - prevTranslate;
-  const dragDistanceInSlides = movedBy / slideWidth;
-
-  index = Math.round(index - dragDistanceInSlides);
-
-  if (index === 0) index = images.length;
-  else if (index > images.length) index = 1;
-
-  applyTranslate();
-
-  if (e.pointerId) {
-    track.releasePointerCapture(e.pointerId);
+    try {
+      carousel.releasePointerCapture(e.pointerId);
+    } catch {}
   }
 
-  isMoving = false;
-};
+  carousel.addEventListener("pointerup", endDrag);
+  carousel.addEventListener("pointercancel", endDrag);
+  carousel.addEventListener("lostpointercapture", endDrag);
 
-track.addEventListener('pointerdown', dragStart);
-track.addEventListener('pointermove', dragMove);
-track.addEventListener('pointerup', dragEnd);
-track.addEventListener('pointercancel', dragEnd);
-track.addEventListener('pointerleave', dragEnd);
+  nextBtn.addEventListener("click", next);
+  prevBtn.addEventListener("click", prev);
 
-buildCarousel();
+  carousel.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
+  });
+
+  window.addEventListener("resize", () => setPosition(false));
+
+  build();
+})();
 </script>
 </body>
 </html>
